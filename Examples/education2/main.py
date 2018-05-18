@@ -1,4 +1,4 @@
-from flask import Flask, render_template as render, request, redirect, url_for
+from flask import Flask, render_template as render, request, redirect
 from tinydb import TinyDB, Query, where
 
 app = Flask(__name__)
@@ -25,7 +25,6 @@ def testdb():
 
 @app.route('/signin')
 def signin():
-    context['alert'] = ''
     return render('signin.html', **context)
 
 
@@ -35,12 +34,10 @@ def do_signin():
     users = db.search(User.login == request.form['login'])
     if len(users) > 0:
         user = users[0]
-        print(user)
-        print(user['password'], request.form['password'])
         if user['password'] == request.form['password']:
             context['login'] = user['login']
             context['role'] = 'admin'
-            return render('index.html', **context)
+            return redirect('/')
         else:
             context['alert']='Неверный пароль'
     else:
@@ -69,8 +66,8 @@ def do_signup():
         return render('signup.html', **context)
     else:
         db.insert({
-            'login' : request.form['login'],
-            'email':request.form['password'],
+            'login':request.form['login'],
+            'email':request.form['email'],
             'password':request.form['password']
         })
       return redirect('/')
