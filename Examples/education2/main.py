@@ -30,7 +30,7 @@ def signin():
 
 
 @app.route('/signin', methods=['POST'])
-def do_login():
+def do_signin():
     User = Query()
     users = db.search(User.login == request.form['login'])
     if len(users) > 0:
@@ -61,7 +61,7 @@ def signup():
 
 
 @app.route('/signup', methods=['POST'])
-def register():
+def do_signup():
     User = Query()
     users = db.search(User.login == request.form['login'])
     if len(users) > 0:
